@@ -18,11 +18,12 @@ ser = serial.Serial(getConfig("port", "COM3"), getConfig("rate", 57600))
 
 print("Starting")
 for i in range(3):
-    time.sleep(0.5)
+    time.sleep(0.3)
     print(".")
 
 def sendBatch(batch):
     print(batch)
+    requests.post(config["url"], json=batch)
 
 try:
     while True:
