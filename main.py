@@ -43,4 +43,4 @@ while True:
                     batch.append(mac)
     except serial.serialutil.SerialException:
         # We need to report downtime
-        requests.post(str("https://maker.ifttt.com/trigger/") + str(config["ifttt_name"] + str("/with/key/") +str(config["ifttt_secret"])    
+        requests.post(str("https://maker.ifttt.com/trigger/") + str(config["ifttt_name"] + str("/with/key/") +str(config["ifttt_secret"])))
