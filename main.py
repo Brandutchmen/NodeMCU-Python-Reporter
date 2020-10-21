@@ -1,13 +1,20 @@
 import json
 import serial
 import time
+import requests
 
-port = "COM3"
-rate = 57600
-timeout_duration = 6  # 6 seconds
-ser = serial.Serial(port, rate)
+f = open('config.json')
+config = json.load(f)
 
-url = "localhost"
+def getConfig(value, default):
+    try:
+        if config[value]:
+            return config[value]
+    except KeyError:
+        return default
+
+timeout_duration = getConfig("timeout", 60)  # 6 seconds
+ser = serial.Serial(getConfig("port", "COM3"), getConfig("rate", 57600))
 
 print("Starting")
 for i in range(3):
@@ -23,14 +30,18 @@ def sendBatch(batch):
     print(batch)
 
 while True:
-    timeout = time.time() + timeout_duration
-    batch = list()
-    while True:
-        if time.time() > timeout:
-            sendBatch(batch)
-            break
-        mac = ser.readline().decode("utf-8")[0:17]
-        if len(mac) > 10:
-            if mac not in batch:
-                batch.append(mac)
+    try:
+        timeout = time.time() + timeout_duration
+        batch = list()
+        while True:
+            if time.time() > timeout:
+                sendBatch(batch)
+                break
+            mac = ser.readline().decode("utf-8")[0:17]
+            if len(mac) > 10:
+                if mac not in batch:
+                    batch.append(mac)
+    except serial.serialutil.SerialException:
+        # We need to report downtime
+         requests.post("https://maker.ifttt.com/trigger/YourEventName/with/key/YourSecretKey")    
 

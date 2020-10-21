@@ -1,0 +1,6 @@
+{
+    "url": "localhost",
+    "timeout": 20,
+    "port": "COM3",
+    "rate": 57600
+}
