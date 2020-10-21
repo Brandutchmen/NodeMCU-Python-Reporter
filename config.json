@@ -1,8 +1,0 @@
-{
-    "url": "localhost",
-    "timeout": 20,
-    "port": "COM3",
-    "rate": 57600,
-    "ifttt_secret": "YOUR SECRET",
-    "ifttt_event": "YOUR EVENT NAME"
-}
