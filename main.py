@@ -6,12 +6,15 @@ import requests
 f = open('config.json')
 config = json.load(f)
 
+
 def getConfig(value, default):
     try:
         if config[value]:
             return config[value]
     except KeyError:
         return default
+
+headers = {"Authorization": str("Bearer ") + str(getConfig("bearer_token", "YOUR_TOKEN"))}
 
 timeout_duration = getConfig("timeout", 60)  # 60 seconds default
 ser = serial.Serial(getConfig("port", "COM3"), getConfig("rate", 57600))
@@ -23,7 +26,9 @@ for i in range(3):
 
 def sendBatch(batch):
     print(batch)
-    requests.post(config["url"], json=batch)
+    print("response:")
+    payload = {"macs" : batch}
+    print(requests.post(config["url"], json=payload, headers=headers).text)
 
 try:
     while True:
